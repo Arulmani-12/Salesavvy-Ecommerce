@@ -12,22 +12,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="jwt_tokens")
+@Table(name = "jwt_tokens")
 public class JWTTokens {
-	
+
 	@Id()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int token_id;
-	
+
 	@Column
 	private String token;
-	
+
 	@Column
 	private LocalDateTime created_at;
-	
+
 	@Column
 	private LocalDateTime expires_at;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private Users user;
@@ -94,5 +94,4 @@ public class JWTTokens {
 		this.user = user;
 	}
 
-	
 }

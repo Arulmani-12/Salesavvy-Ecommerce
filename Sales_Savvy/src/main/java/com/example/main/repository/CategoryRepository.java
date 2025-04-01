@@ -10,5 +10,5 @@ import com.example.main.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-	Optional<Category> findByCategoryName(String categoryName);
+	Optional<Category> findByCategoryName(String categoryName); // Find Category
 }

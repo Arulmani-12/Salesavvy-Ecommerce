@@ -1,11 +1,8 @@
 package com.example.main.dto;
 
-
 public class LoginData {
 
-	
 	private String username;
-	
 	private String password;
 
 	public LoginData() {
@@ -34,6 +31,5 @@ public class LoginData {
 		this.username = username;
 		this.password = password;
 	}
-	
-	
+
 }

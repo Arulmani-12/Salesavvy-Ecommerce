@@ -1,6 +1,5 @@
 package com.example.main.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,43 +10,57 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "productimages")
-public class ProductImage {
+@Table(name = "cart_items")
+public class CartItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer ImageId;
+	private int id;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Users user;
+
+	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 
 	@Column
-	private String ImageUrl;
+	private int quantity;
 
-	public ProductImage() {
+	public CartItem() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProductImage(Integer imageId, Product product, String imageUrl) {
+	public CartItem(int id, Users user, Product product, int quantity) {
 		super();
-		ImageId = imageId;
+		this.id = id;
+		this.user = user;
 		this.product = product;
-		ImageUrl = imageUrl;
+		this.quantity = quantity;
 	}
 
-	public ProductImage(Product product, String imageUrl) {
+	public CartItem(Users user, Product product, int quantity) {
 		super();
+		this.user = user;
 		this.product = product;
-		ImageUrl = imageUrl;
+		this.quantity = quantity;
 	}
 
-	public Integer getImageId() {
-		return ImageId;
+	public int getCartId() {
+		return id;
 	}
 
-	public void setImageId(Integer imageId) {
-		ImageId = imageId;
+	public void setCartId(int id) {
+		this.id = id;
+	}
+
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	public Product getProduct() {
@@ -58,12 +71,12 @@ public class ProductImage {
 		this.product = product;
 	}
 
-	public String getImageUrl() {
-		return ImageUrl;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		ImageUrl = imageUrl;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 }

@@ -8,14 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="categories")
+@Table(name = "categories")
 public class Category {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer categoryId;
-	
-	@Column(name="category_name")
+
+	@Column(name = "category_name")
 	private String categoryName;
 
 	public Category() {
@@ -44,7 +44,4 @@ public class Category {
 		categoryName = categoryName;
 	}
 
-	
-	
-	
 }

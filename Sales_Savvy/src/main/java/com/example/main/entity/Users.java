@@ -18,23 +18,23 @@ public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
-	
+
 	@Column
 	private String username;
-	
+
 	@Column
 	private String email;
-	
+
 	@Column
 	private String password;
-	
+
 	@Column
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	
+
 	@Column
 	private LocalDateTime created_at = LocalDateTime.now();
-	
+
 	@Column
 	private LocalDateTime updated_at = LocalDateTime.now();
 
@@ -60,7 +60,6 @@ public class Users {
 		this.created_at = created_at;
 		this.updated_at = updated_at;
 	}
-	
 
 	public Users() {
 		super();
@@ -122,10 +121,7 @@ public class Users {
 	public void setUpdated_at(LocalDateTime updated_at) {
 		this.updated_at = updated_at;
 	}
-	
+
 	// WILL DO FOR CART ITEMS ONE TO MANY RELATIONSHIPS
-	
-	
-	
-	
+
 }

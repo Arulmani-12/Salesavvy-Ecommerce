@@ -20,10 +20,10 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class LoginService {
 
-	private static SecretKey SIGN_KEY;
+	private static SecretKey SIGN_KEY; // SIGN_KEY to Generate JWT Token
 	private JWTTokenRepository tokenRepository;
 	private UserRepository userRepository;
-	BCryptPasswordEncoder passwordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
 
 	public LoginService(JWTTokenRepository tokenRepository, UserRepository userRepository,
 			@Value("${jwt.secret}") String jwtsecret) {
@@ -34,26 +34,24 @@ public class LoginService {
 		this.passwordEncoder = new BCryptPasswordEncoder();
 	}
 
+	// User&password Validation
 	public Users ValidateUser(String username, String password) {
 
-		Optional<Users> existingUser = userRepository.findByUsername(username);
+		Optional<Users> existingUser = userRepository.findByUsername(username); // Get Username from Database
 		if (existingUser.isPresent()) {
 			Users user = existingUser.get();
 			if (!passwordEncoder.matches(password, existingUser.get().getPassword())) {
-				throw new RuntimeException("Invalid Password");
+				throw new RuntimeException("Invalid Password"); // Throw Error if Password Wrong
 			}
 			return user;
-
 		} else {
 			throw new RuntimeException("Invalid Username");
 		}
-
 	}
 
 	public String generateToken(Users user) {
 		String token;
 		LocalDateTime currentTime = LocalDateTime.now();
-
 		JWTTokens existingTokens = tokenRepository.findByuser_id(user.getUserId());
 		if (existingTokens != null && currentTime.isBefore(existingTokens.getExpires_at())) {
 			token = existingTokens.getToken();
@@ -64,49 +62,40 @@ public class LoginService {
 			}
 			saveToken(user, token);
 		}
-
 		return token;
 	}
-
 
 	public String generateNewToken(Users user) {
 
-		JwtBuilder builder = Jwts.builder();
+		JwtBuilder builder = Jwts.builder(); // Generate JWT Token using SIGN_KEY
 		builder.setSubject(user.getUsername());
 		builder.claim("role", user.getRole().name());
 		builder.setIssuedAt(new Date());
-		builder.setExpiration(new Date(System.currentTimeMillis() + 3600000));
+		builder.setExpiration(new Date(System.currentTimeMillis() + 3600000)); // set Expiration
 		builder.signWith(SIGN_KEY);
-		String token = builder.compact();
+		String token = builder.compact(); // Build token
 		return token;
 	}
 
-	
 	public boolean validateToken(String token) {
 		System.out.println("Validating token");
 		try {
-			Jwts.parserBuilder().setSigningKey(SIGN_KEY).build().parseClaimsJws(token);
-
+			Jwts.parserBuilder().setSigningKey(SIGN_KEY).build().parseClaimsJws(token); // Token Parsing happens
 			Optional<JWTTokens> existingTokens = tokenRepository.findBytoken(token);
 			if (existingTokens.isPresent()) {
-				return existingTokens.get().getExpires_at().isAfter(LocalDateTime.now());
+				return existingTokens.get().getExpires_at().isAfter(LocalDateTime.now()); // Check token is Expired or
+																							// not
 			}
-
 			return false;
-
 		} catch (Exception e) {
-			System.out.println("token validation FAil.." + e.getMessage());
+			System.out.println("Token validation Fail.." + e.getMessage());
 			return false;
 		}
 	}
 
 	public String extractUsername(String token) {
-		return Jwts.parserBuilder()
-				.setSigningKey(SIGN_KEY)
-				.build()
-				.parseClaimsJws(token)
-				.getBody()
-				.getSubject();
+		return Jwts.parserBuilder() // Extract UserName from JWT Token
+				.setSigningKey(SIGN_KEY).build().parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public void saveToken(Users user, String tokens) {

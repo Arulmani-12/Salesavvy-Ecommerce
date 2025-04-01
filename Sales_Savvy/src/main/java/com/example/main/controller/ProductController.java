@@ -23,14 +23,14 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/api")
 public class ProductController {
 
-	ProductService productService;
+	private ProductService productService;
 
 	public ProductController(ProductService productService) {
 		this.productService = productService;
 	}
 
 	@GetMapping("/products")
-	public ResponseEntity<Map<String,Object>> getProducts(@RequestParam String category, HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> getProducts(@RequestParam String category, HttpServletRequest request) {
 
 		try {
 			Users authUsers = (Users) request.getAttribute("authenticatedUser");
@@ -48,12 +48,11 @@ public class ProductController {
 			Map<String, String> userInfo = new HashMap<>();
 			userInfo.put("name", authUsers.getUsername());
 			userInfo.put("role", authUsers.getRole().name());
-
 			response.put("user", userInfo);
-
 			List<Map<String, Object>> plist = new ArrayList<>();
 
 			for (Product product : productsList) {
+
 				Map<String, Object> productDetails = new HashMap<>();
 
 				productDetails.put("product_id", product.getProductId());
@@ -66,14 +65,10 @@ public class ProductController {
 				productDetails.put("images", images);
 				plist.add(productDetails);
 			}
-
 			response.put("products", plist);
-
 			return ResponseEntity.ok(response);
-
 		} catch (Exception e) {
-			
-			return ResponseEntity.badRequest().body(Map.of("Error",e.getMessage()));
+			return ResponseEntity.badRequest().body(Map.of("Error", e.getMessage()));
 		}
 	}
 }

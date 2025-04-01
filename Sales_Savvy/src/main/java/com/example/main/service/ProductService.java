@@ -20,9 +20,7 @@ public class ProductService {
 	private ProductRepository productRepository;
 	private ProductImageRepository imageRepository;
 	private CategoryRepository categoryRepository;
-	
 
-	
 	public ProductService(ProductRepository productRepository, ProductImageRepository imageRepository,
 			CategoryRepository categoryRepository) {
 		super();
@@ -31,59 +29,29 @@ public class ProductService {
 		this.categoryRepository = categoryRepository;
 	}
 
-
-
-
 	public List<Product> getProducts(String categoryName) {
-		
-		if(categoryName != null && !categoryName.isEmpty()) {
-			
-			Optional<Category> optionalCategory= categoryRepository.findByCategoryName(categoryName);
-			
-			if(optionalCategory.isPresent()) {
-				
-				Category category= optionalCategory.get();
-				 return productRepository.findByCategory_CategoryId(category.getCategoryId());
-				
+
+		if (categoryName != null && !categoryName.isEmpty()) { // get Products Based on Category
+			Optional<Category> optionalCategory = categoryRepository.findByCategoryName(categoryName);
+			if (optionalCategory.isPresent()) {
+				Category category = optionalCategory.get();
+				return productRepository.findByCategory_CategoryId(category.getCategoryId());
 			} else {
 				throw new RuntimeException("CategoryNotFound");
 			}
-			
 		} else {
 			return productRepository.findAll();
 		}
 	}
-	
-	
-	public List<String> getProductImages(Integer productId) {
-		
-		 List<ProductImage> productImages = imageRepository.findByProduct_ProductId(productId);
-		
-		 List<String> ImageUrl = new ArrayList<>();
-		 
-		 for (ProductImage image : productImages) {
-			
-			 ImageUrl.add(image.getImageUrl());
+
+	public List<String> getProductImages(Integer productId) { // Fetch ProductImages for the productId
+
+		List<ProductImage> productImages = imageRepository.findByProduct_ProductId(productId);
+		List<String> ImageUrl = new ArrayList<>();
+
+		for (ProductImage image : productImages) {
+			ImageUrl.add(image.getImageUrl());
 		}
-		 
-		 
 		return ImageUrl;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

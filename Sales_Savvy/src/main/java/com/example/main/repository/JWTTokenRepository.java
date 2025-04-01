@@ -9,12 +9,11 @@ import org.springframework.stereotype.Repository;
 import com.example.main.entity.JWTTokens;
 
 @Repository
-public interface JWTTokenRepository extends JpaRepository<JWTTokens, Integer>{
+public interface JWTTokenRepository extends JpaRepository<JWTTokens, Integer> {
 
 	@Query("SELECT t FROM JWTTokens t where t.user.userId =:userId")
-	 JWTTokens findByuser_id(int userId);
-	
-	 Optional<JWTTokens> findBytoken(String token);
+	JWTTokens findByuser_id(int userId); // Find token for specific userId
 
-	
+	Optional<JWTTokens> findBytoken(String token);
+
 }

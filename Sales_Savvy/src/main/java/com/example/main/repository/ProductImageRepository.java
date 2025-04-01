@@ -10,6 +10,5 @@ import com.example.main.entity.ProductImage;
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
 
-	
 	List<ProductImage> findByProduct_ProductId(Integer productId);
 }
