@@ -16,6 +16,7 @@ import com.example.main.entity.Users;
 import com.example.main.service.LoginService;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -57,6 +58,29 @@ public class LoginController {
 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("Error", e.getMessage()));
+		}
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<Map<String, Object>> logOutUser(HttpServletResponse response, HttpServletRequest request) {
+
+		try {
+			Users user = (Users) request.getAttribute("authenticatedUser");
+			loginService.logout(user);
+			Cookie cookie = new Cookie("authToken", null);
+			cookie.setHttpOnly(true); // Prevents JavaScript access
+			// cookie.setSecure(false); // Should be true in production (HTTPS)
+			cookie.setPath("/"); // Available for all routes
+			cookie.setMaxAge(0); // 1 hour expiration
+			cookie.setAttribute("SameSite", "Lax");
+			response.addCookie(cookie);
+
+			response.addHeader("Set-Cookie",
+					String.format("authToken=%s; HttpOnly; Path=/; Max-Age=0; SameSite=None", null));
+
+			return ResponseEntity.ok(Map.of("message", "Logout successfull"));
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(Map.of("message", "Logout Failed"));
 		}
 	}
 }

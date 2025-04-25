@@ -34,6 +34,20 @@ public class LoginService {
 		this.passwordEncoder = new BCryptPasswordEncoder();
 	}
 
+	//Logout Functionality
+	public void logout(Users user) {
+		
+		  JWTTokens tokens =  tokenRepository.findByuser_id(user.getUserId());
+		  
+		  if (tokens != null) {
+			  tokenRepository.deleteByUserId(user.getUserId());
+		  }
+	}
+	
+	
+	
+	
+	
 	// User&password Validation
 	public Users ValidateUser(String username, String password) {
 

@@ -83,21 +83,21 @@ public class CartService {
 			String imageUrl = (pimage != null & !pimage.isEmpty()) ? pimage.get(0).getImageUrl() : "default-image-url";
 
 			// Store ProductDetails into HashMap
-			productDetails.put("Product_id", product.getProductId());
+			productDetails.put("product_id", product.getProductId());
 			productDetails.put("image_url", imageUrl);
-			productDetails.put("Product_name", product.getName());
-			productDetails.put("Description", product.getDescription());
+			productDetails.put("name", product.getName());
+			productDetails.put("description", product.getDescription());
 			productDetails.put("price_per_unit", product.getPrice());
-			productDetails.put("Quantity", item.getQuantity());
-			productDetails.put("Total_price", item.getQuantity() * product.getPrice().doubleValue());
+			productDetails.put("quantity", item.getQuantity());
+			productDetails.put("total_price", item.getQuantity() * product.getPrice().doubleValue());
 
 			productList.add(productDetails);
 			overall_price += item.getQuantity() * product.getPrice().doubleValue();
 		}
 
 		Map<String, Object> cart = new HashMap<>();
-		cart.put("Products", productList);
-		cart.put("Overall_Price", overall_price);
+		cart.put("products", productList);
+		cart.put("overall_total_price", overall_price);
 		response.put("cart", cart); // CartItems Stored into HashMap
 		return response;
 	}
